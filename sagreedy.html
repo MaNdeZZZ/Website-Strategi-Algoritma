@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knapsack Problem Greedy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E3FEF7;
+            color: #343a40;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+        }
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        label, input, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="number"], input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .result h2 {
+            color: #28a745;
+        }
+        .result p, .result ul {
+            margin: 10px 0;
+        }
+        .result ul {
+            padding-left: 20px;
+        }
+        .result ul li {
+            list-style-type: disc;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class = "container">
+        <h1>Knapsack Problem Greedy</h1>
+        <form id="inputForm">
+            <label for="jumlahB">Berapa barang yang ingin dimasukkan?</label>
+            <input type="number" id="jumlahB" name="jumlahB" min="1" max="10"><br><br>
+    
+            <label for="kapasitas">Masukkan kapasitas maksimum tas:</label>
+            <input type="number" id="kapasitas" name="kapasitas" min="0" step="0.1"><br><br>
+    
+            <div id="barangInputs"></div>
+    
+            <button type="button" onclick="addBarangInput()">Tambah Barang</button>
+            <button type="button" onclick="solveKnapsack()">Hitung</button>
+        </form>
+    
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const nmax = 10;
+        const items = [            { barang: "Nasi", kalori: 129 },            { barang: "Indomie", kalori: 430 },            { barang: "Sarden", kalori: 100 },            { barang: "Sosis", kalori: 220 },            { barang: "Wafer", kalori: 500 },            { barang: "Roti", kalori: 310 },            { barang: "Biskuit", kalori: 500 },            { barang: "AirPutih", kalori: 0 },            { barang: "Susu", kalori: 90 },            { barang: "Kopi", kalori: 450 }        ];
+
+        function addBarangInput() {
+            const barangInputs = document.getElementById('barangInputs');
+            const index = barangInputs.children.length;
+            if (index < nmax) {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <label for="barang${index}">Nama Barang:</label>
+                    <input type="text" id="barang${index}" name="barang${index}"><br>
+                    <label for="jenis${index}">Jenis Barang:</label>
+                    <input type="text" id="jenis${index}" name="jenis${index}"><br>
+                    <label for="berat${index}">Berat (gram):</label>
+                    <input type="number" id="berat${index}" name="berat${index}" step="0.1"><br><br>
+                `;
+                barangInputs.appendChild(div);
+            }
+        }
+
+        function solveKnapsack() {
+            const jumlahB = parseInt(document.getElementById('jumlahB').value);
+            const kapasitas = parseFloat(document.getElementById('kapasitas').value);
+            const X = [];
+
+            for (let i = 0; i < jumlahB; i++) {
+                const barang = document.getElementById(`barang${i}`).value;
+                const jenis = document.getElementById(`jenis${i}`).value;
+                const berat = parseFloat(document.getElementById(`berat${i}`).value);
+                const item = items.find(item => item.barang === barang);
+                if (item) {
+                    const totalkalori = (berat / 100) * item.kalori;
+                    X.push({ barang, jenis, kalori: item.kalori, berat, totalkalori });
+                }
+            }
+
+            const bestWeightSolution = greedyByWeight(X, kapasitas);
+            const bestValueSolution = greedyByValue(X, kapasitas);
+            const bestDensitySolution = greedyByDensity(X, kapasitas);
+
+            let bestSolution = bestWeightSolution;
+            if (bestValueSolution.totalKalori > bestSolution.totalKalori) {
+                bestSolution = bestValueSolution;
+            }
+            if (bestDensitySolution.totalKalori > bestSolution.totalKalori) {
+                bestSolution = bestDensitySolution;
+            }
+
+            displayResult(bestWeightSolution, 'Berat');
+            displayResult(bestValueSolution, 'Kalori');
+            displayResult(bestDensitySolution, 'Density');
+            displayResult(bestSolution, 'Solusi Terbaik');
+        }
+
+        function greedyByWeight(items, capacity) {
+            items.sort((a, b) => {
+                if (a.jenis === "Minuman" && b.jenis !== "Minuman") return -1;
+                if (a.jenis !== "Minuman" && b.jenis === "Minuman") return 1;
+                return a.berat - b.berat;
+            });
+
+            return greedyAlgorithm(items, capacity);
+        }
+
+        function greedyByValue(items, capacity) {
+            items.sort((a, b) => {
+                if (a.jenis === "Minuman" && b.jenis !== "Minuman") return -1;
+                if (a.jenis !== "Minuman" && b.jenis === "Minuman") return 1;
+                return b.totalkalori - a.totalkalori;
+            });
+
+            return greedyAlgorithm(items, capacity);
+        }
+
+        function greedyByDensity(items, capacity) {
+            items.sort((a, b) => {
+                if (a.jenis === "Minuman" && b.jenis !== "Minuman") return -1;
+                if (a.jenis !== "Minuman" && b.jenis === "Minuman") return 1;
+                return (b.totalkalori / b.berat) - (a.totalkalori / a.berat);
+            });
+
+            return greedyAlgorithm(items, capacity);
+        }
+
+        function greedyAlgorithm(items, capacity) {
+            let selected = [];
+            let totalWeight = 0;
+            let totalKalori = 0;
+
+            for (let item of items) {
+                if (item.berat === 0) continue;
+                if (totalWeight + item.berat <= capacity) {
+                    selected.push(item);
+                    totalWeight += item.berat;
+                    totalKalori += item.totalkalori;
+                }
+            }
+
+            if (!checkMinumanCondition(totalWeight, totalKalori, selected)) {
+                totalKalori = 0;
+            }
+
+            return { selectedItems: selected, totalBerat: totalWeight, totalKalori: totalKalori };
+        }
+
+        function checkMinumanCondition(totalWeight, totalKalori, selected) {
+            let minumanBerat = 0;
+
+            for (let item of selected) {
+                if (item.jenis === "Minuman") {
+                    minumanBerat += item.berat;
+                }
+            }
+
+            return minumanBerat >= 3000 && totalKalori >= 6000;
+        }
+
+        function displayResult(solution, type) {
+            const resultDiv = document.getElementById('result');
+            const section = document.createElement('div');
+            section.className = 'result';
+            section.innerHTML = `
+                <h2>${type}</h2>
+                <p>Total Berat yang Dipilih: ${solution.totalBerat} gram</p>
+                <p>Total Kalori yang Dipilih: ${solution.totalKalori}</p>
+                <h3>Barang yang Dipilih:</h3>
+                <ul>
+                    ${solution.selectedItems.map(item => `<li>${item.barang}: Berat=${item.berat} gram, Kalori=${item.totalkalori}</li>`).join('')}
+                </ul>
+            `;
+            resultDiv.appendChild(section);
+        }
+    </script>
+</body>
+</html>
+
