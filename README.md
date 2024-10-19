@@ -3,8 +3,8 @@
 Program ini bertujuan untuk membantu para pendaki dalam menghitung jumlah makanan dan minuman yang perlu dibawa selama ekspedisi, dengan memperhitungkan kapasitas maksimal beban tas, kebutuhan kalori harian, serta kebutuhan minimum air. Program ini akan diimplementasikan menggunakan dua pendekatan algoritma, yaitu greedy dan dynamic programming, dalam bahasa pemrograman JavaScript. Selanjutnya, program ini juga akan menganalisis efisiensi dari masing-masing algoritma tersebut.
 
 # Fitur Utama
-•	Input Data: Pengguna dapat memasukkan jenis dan jumlah barang (makanan/minuman) yang akan dibawa, serta berat masing-masing barang.
-•	Data Kalori: Program menyediakan data kalori dari berbagai makanan dan minuman yang umum dibawa oleh pendaki.
+- Input Data: Pengguna dapat memasukkan jenis dan jumlah barang (makanan/minuman) yang akan dibawa, serta berat masing-masing barang.
+- Data Kalori: Program menyediakan data kalori dari berbagai makanan dan minuman yang umum dibawa oleh pendaki.
 •	Algoritma Greedy: Terdapat tiga strategi pemilihan menggunakan algoritma greedy:
     o	Greedy by Weight: Memprioritaskan barang dengan berat paling ringan terlebih dahulu.
     o	Greedy by Calories: Memprioritaskan barang yang memberikan kalori paling tinggi.
