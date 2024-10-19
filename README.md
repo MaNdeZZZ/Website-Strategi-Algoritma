@@ -2,15 +2,15 @@
 
 Program ini bertujuan untuk membantu para pendaki dalam menghitung jumlah makanan dan minuman yang perlu dibawa selama ekspedisi, dengan memperhitungkan kapasitas maksimal beban tas, kebutuhan kalori harian, serta kebutuhan minimum air. Program ini akan diimplementasikan menggunakan dua pendekatan algoritma, yaitu greedy dan dynamic programming, dalam bahasa pemrograman JavaScript. Selanjutnya, program ini juga akan menganalisis efisiensi dari masing-masing algoritma tersebut.
 
-**Fitur Utama**
-> Input Data: Pengguna dapat memasukkan jenis dan jumlah barang (makanan/minuman) yang akan dibawa, serta berat masing-masing barang.
-> Data Kalori: Program menyediakan data kalori dari berbagai makanan dan minuman yang umum dibawa oleh pendaki.
-> Algoritma Greedy: Terdapat tiga strategi pemilihan menggunakan algoritma greedy:
-    > Greedy by Weight: Memprioritaskan barang dengan berat paling ringan terlebih dahulu.
-    > Greedy by Calories: Memprioritaskan barang yang memberikan kalori paling tinggi.
-    > Greedy by Density: Mengutamakan barang dengan perbandingan kalori terhadap berat yang paling tinggi.
-> Algoritma Dynamic Programming (Knapsack): Menyediakan solusi optimal untuk memilih barang berdasarkan kapasitas tas dengan mempertimbangkan kebutuhan kalori minimal dan syarat berat air minum.
-> Analisis Efisiensi: Membandingkan waktu eksekusi antara strategi greedy dan dynamic programming untuk memahami performa masing-masing metode.
+
+Input Data: Pengguna dapat memasukkan jenis dan jumlah barang (makanan/minuman) yang akan dibawa, serta berat masing-masing barang.
+Data Kalori: Program menyediakan data kalori dari berbagai makanan dan minuman yang umum dibawa oleh pendaki.
+Algoritma Greedy: Terdapat tiga strategi pemilihan menggunakan algoritma greedy:
+    Greedy by Weight: Memprioritaskan barang dengan berat paling ringan terlebih dahulu.
+    Greedy by Calories: Memprioritaskan barang yang memberikan kalori paling tinggi.
+    Greedy by Density: Mengutamakan barang dengan perbandingan kalori terhadap berat yang paling tinggi.
+Algoritma Dynamic Programming (Knapsack): Menyediakan solusi optimal untuk memilih barang berdasarkan kapasitas tas dengan mempertimbangkan kebutuhan kalori minimal dan syarat berat air minum.
+Analisis Efisiensi: Membandingkan waktu eksekusi antara strategi greedy dan dynamic programming untuk memahami performa masing-masing metode.
 
 **Struktur Program**
 > Algoritma Dynamic Programming: Menggunakan pendekatan knapsack problem untuk menentukan kombinasi barang terbaik berdasarkan berat dan kalori yang memenuhi kapasitas tas.
